@@ -30,6 +30,8 @@ interface Progress {
 export default function Home() {
   const [catalog, setCatalog] = useState<Catalog | null>(null)
   const [progress, setProgress] = useState<Record<string, Progress>>({})
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     fetch('/catalog.json')
@@ -51,11 +53,50 @@ export default function Home() {
     )
   }
 
+  const filteredBooks = catalog.books.filter(book =>
+    book.title.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
     <main style={styles.container}>
-      <h1 style={styles.title}>Audiolibros</h1>
+      <div style={styles.header}>
+        <h1 style={styles.title}>Audiolibros</h1>
+        <button
+          onClick={() => {
+            setSearchOpen(!searchOpen)
+            if (searchOpen) setSearchQuery('')
+          }}
+          style={styles.searchBtn}
+          aria-label="Buscar libros"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+        </button>
+      </div>
+      {searchOpen && (
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Buscar por nombre..."
+          style={styles.searchInput}
+          autoFocus
+          aria-label="Buscar libros por nombre"
+        />
+      )}
       <div style={styles.bookList}>
-        {catalog.books.map(book => {
+        {filteredBooks.map(book => {
           const bookProgress = progress[book.id]
           return (
             <Link key={book.id} href={`/book/${book.id}`} style={styles.bookCard}>
@@ -81,11 +122,41 @@ const styles: Record<string, React.CSSProperties> = {
     maxWidth: '600px',
     margin: '0 auto',
   },
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '24px',
+  },
   title: {
     fontSize: '28px',
     fontWeight: 700,
-    marginBottom: '24px',
     color: '#ffffff',
+    margin: 0,
+  },
+  searchBtn: {
+    width: '44px',
+    height: '44px',
+    backgroundColor: '#1a1a1a',
+    border: 'none',
+    borderRadius: '12px',
+    color: '#ffffff',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+  },
+  searchInput: {
+    width: '100%',
+    padding: '14px 16px',
+    backgroundColor: '#1a1a1a',
+    border: '1px solid #3a3a3a',
+    borderRadius: '12px',
+    color: '#ffffff',
+    fontSize: '16px',
+    marginBottom: '16px',
+    outline: 'none',
+    boxSizing: 'border-box',
   },
   loading: {
     color: '#a0a0a0',
