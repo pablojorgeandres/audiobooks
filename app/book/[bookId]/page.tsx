@@ -28,7 +28,7 @@ interface Progress {
   playbackRate: number
 }
 
-const SPEEDS = [0.5, 1, 1.5, 2]
+const SPEEDS = [0.5, 0.75, 1, 1.5, 2]
 
 export default function BookPage() {
   const params = useParams()
@@ -169,12 +169,6 @@ export default function BookPage() {
     }
   }
 
-  const cycleSpeed = () => {
-    const currentIndex = SPEEDS.indexOf(playbackRate)
-    const nextIndex = (currentIndex + 1) % SPEEDS.length
-    setPlaybackRate(SPEEDS[nextIndex])
-  }
-
   const formatTime = (seconds: number) => {
     if (!isFinite(seconds)) return '--:--'
     const mins = Math.floor(seconds / 60)
@@ -243,9 +237,16 @@ export default function BookPage() {
         </div>
 
         <div style={styles.controls}>
-          <button onClick={cycleSpeed} style={styles.speedBtn}>
-            {playbackRate}x
-          </button>
+          <select
+            value={playbackRate}
+            onChange={(e) => setPlaybackRate(parseFloat(e.target.value))}
+            style={styles.speedSelect}
+            aria-label="Velocidad de reproducción"
+          >
+            {SPEEDS.map(speed => (
+              <option key={speed} value={speed}>{speed}x</option>
+            ))}
+          </select>
           <button onClick={togglePlay} style={styles.playBtn}>
             {isPlaying ? '⏸' : '▶'}
           </button>
@@ -346,15 +347,24 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     gap: '24px',
   },
-  speedBtn: {
-    width: '48px',
-    height: '36px',
+  speedSelect: {
+    width: '64px',
+    height: '44px',
     backgroundColor: '#2a2a2a',
     border: 'none',
     borderRadius: '8px',
     color: '#ffffff',
     fontSize: '14px',
     fontWeight: 600,
+    textAlign: 'center',
+    cursor: 'pointer',
+    appearance: 'none',
+    WebkitAppearance: 'none',
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0a0a0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 8px center',
+    paddingRight: '24px',
+    paddingLeft: '8px',
   },
   playBtn: {
     width: '64px',
