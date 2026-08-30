@@ -15,6 +15,7 @@ interface Book {
   title: string
   folderId: string
   chapters: Chapter[]
+  pdfFileId?: string
 }
 
 interface Catalog {
@@ -30,6 +31,8 @@ interface Progress {
 
 const SPEEDS = [0.5, 0.75, 1, 1.5, 2]
 
+type ViewMode = 'audio' | 'pdf'
+
 export default function BookPage() {
   const params = useParams()
   const bookId = params.bookId as string
@@ -41,6 +44,7 @@ export default function BookPage() {
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [viewMode, setViewMode] = useState<ViewMode>('audio')
   
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const progressSaveRef = useRef<NodeJS.Timeout>()
@@ -208,6 +212,7 @@ export default function BookPage() {
   }
 
   const currentChapter = book.chapters[chapterIndex]
+  const hasPdf = Boolean(book.pdfFileId)
 
   return (
     <main style={styles.container}>
@@ -218,7 +223,41 @@ export default function BookPage() {
         <h1 style={styles.title}>{book.title}</h1>
       </header>
 
-      <div style={styles.player}>
+      {hasPdf && (
+        <div style={styles.tabContainer}>
+          <button
+            onClick={() => setViewMode('audio')}
+            style={{
+              ...styles.tabButton,
+              ...(viewMode === 'audio' ? styles.tabButtonActive : {}),
+            }}
+          >
+            Audio
+          </button>
+          <button
+            onClick={() => setViewMode('pdf')}
+            style={{
+              ...styles.tabButton,
+              ...(viewMode === 'pdf' ? styles.tabButtonActive : {}),
+            }}
+          >
+            PDF
+          </button>
+        </div>
+      )}
+
+      {viewMode === 'pdf' && book.pdfFileId ? (
+        <div style={styles.pdfContainer}>
+          <iframe
+            src={`https://drive.google.com/file/d/${book.pdfFileId}/preview`}
+            style={styles.pdfViewer}
+            allow="autoplay"
+            title={`PDF de ${book.title}`}
+          />
+        </div>
+      ) : (
+        <>
+          <div style={styles.player}>
         <p style={styles.nowPlaying}>
           {currentChapter.title}
         </p>
@@ -279,6 +318,8 @@ export default function BookPage() {
           </button>
         ))}
       </div>
+        </>
+      )}
     </main>
   )
 }
@@ -290,6 +331,43 @@ const styles: Record<string, React.CSSProperties> = {
     maxWidth: '600px',
     margin: '0 auto',
     paddingBottom: '200px',
+  },
+  tabContainer: {
+    display: 'flex',
+    gap: '8px',
+    marginBottom: '20px',
+    backgroundColor: '#1a1a1a',
+    borderRadius: '12px',
+    padding: '4px',
+  },
+  tabButton: {
+    flex: 1,
+    padding: '12px 16px',
+    backgroundColor: 'transparent',
+    border: 'none',
+    borderRadius: '8px',
+    color: '#a0a0a0',
+    fontSize: '15px',
+    fontWeight: 600,
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
+  tabButtonActive: {
+    backgroundColor: '#3b82f6',
+    color: '#ffffff',
+  },
+  pdfContainer: {
+    backgroundColor: '#1a1a1a',
+    borderRadius: '16px',
+    overflow: 'hidden',
+    marginBottom: '24px',
+  },
+  pdfViewer: {
+    width: '100%',
+    height: 'calc(100vh - 200px)',
+    minHeight: '500px',
+    border: 'none',
+    display: 'block',
   },
   loading: {
     color: '#a0a0a0',
