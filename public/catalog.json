@@ -30,6 +30,22 @@
         { "number": 23, "title": "Capítulo 23", "fileId": "1xgqyJqnMHNTAwm9hvAh78ZeQEsQT9uVa" },
         { "number": 24, "title": "Capítulo 24", "fileId": "1LBh9Vm7kqG0UaqscnzePRfoEfuq99WvW" }
       ]
+    },
+    {
+      "id": "el-ciclo-de-las-lunaciones",
+      "title": "El ciclo de las lunaciones - Dane Rudhyar",
+      "folderId": "1__5Tqu4FtPiELdV-g7B7FmiRROhfYuGF",
+      "chapters": [
+        { "number": 1, "title": "Capítulo 01", "fileId": "1sWZMsHmqM7HhSZUumCGbYQgjBdXGsGJe" },
+        { "number": 2, "title": "Capítulo 02", "fileId": "1jMjtpUDHgcf_W14xwPrfhAOmv0rdf5ES" },
+        { "number": 3, "title": "Capítulo 03", "fileId": "16mKKrO9ikBvt_7VP7zeiQurGLu-4Ls8N" },
+        { "number": 4, "title": "Capítulo 04", "fileId": "1pY-QX8dAZUQCxGr_inGroBqwwFJwu3d9" },
+        { "number": 5, "title": "Capítulo 05", "fileId": "16C6Vt_ffUQ9tjcz36wAiOHj4QISvqcOG" },
+        { "number": 6, "title": "Capítulo 06", "fileId": "1U5AmU580V0G8SgIxTc8LHC1DUqcFMQbG" },
+        { "number": 7, "title": "Capítulo 07", "fileId": "1D2aLct2p68BsvVi2XUecmrW7aspgp8Id" },
+        { "number": 8, "title": "Capítulo 08", "fileId": "1xpwA05Z4bfkyajxWPpxyQ7qtrJTnOuV4" },
+        { "number": 9, "title": "Capítulo 09", "fileId": "1pDaWho4-oNQo9xresR1kgO2gXcMKJ0hv" }
+      ]
     }
   ]
 }
