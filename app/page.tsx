@@ -14,6 +14,7 @@ interface Book {
   title: string
   folderId: string
   chapters: Chapter[]
+  pdfFileId?: string
 }
 
 interface Catalog {
