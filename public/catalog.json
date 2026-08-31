@@ -48,6 +48,30 @@
         { "number": 8, "title": "Capítulo 08", "fileId": "1xpwA05Z4bfkyajxWPpxyQ7qtrJTnOuV4" },
         { "number": 9, "title": "Capítulo 09", "fileId": "1pDaWho4-oNQo9xresR1kgO2gXcMKJ0hv" }
       ]
+    },
+    {
+      "id": "el-kybalion",
+      "title": "El Kybalion - Tres Iniciados",
+      "folderId": "1pZzOC4BF8_qIk6XcAWgESlVjRSa4CKM3",
+      "pdfFileId": "1Espc9JgVsusItBef90ayfsPX9YLFCY_q",
+      "chapters": [
+        { "number": 1, "title": "Capítulo 01", "fileId": "1M-43AoMPH85vGf3xp8yTIe6_kJxnlDnx" },
+        { "number": 2, "title": "Capítulo 02", "fileId": "1UbjzzLyay77J1XninjUalFxPrX5PdbC2" },
+        { "number": 3, "title": "Capítulo 03", "fileId": "1h0-eVfWc71CPTcIjirR-fnqvsuGuReOM" },
+        { "number": 4, "title": "Capítulo 04", "fileId": "1qCXn-fbL1I1_hNM_f-wf5pJvvLMJ3Wa5" },
+        { "number": 5, "title": "Capítulo 05", "fileId": "1yd8Vc6apwkt4T5ur-seQo2hJy6x41yYe" },
+        { "number": 6, "title": "Capítulo 06", "fileId": "10qWfWbBL8S-_iRs_2gO47zbvP8ksQQpO" },
+        { "number": 7, "title": "Capítulo 07", "fileId": "1PGEbDm8FrP-EZ3GXFDW-R9wTXCuCHT3s" },
+        { "number": 8, "title": "Capítulo 08", "fileId": "1_HVahI9kfOfnfWiph7nr0hNBm4vynLuX" },
+        { "number": 9, "title": "Capítulo 09", "fileId": "1IKe0G_2g8beF8J0F8UjV0mXxKC5ouCRS" },
+        { "number": 10, "title": "Capítulo 10", "fileId": "1gZd1P-fc86WnDeBi4PZnicK1Q4RkCprS" },
+        { "number": 11, "title": "Capítulo 11", "fileId": "1Z8uOaJJlr_vxXDjcb6OP--zmQJg8fITg" },
+        { "number": 12, "title": "Capítulo 12", "fileId": "1BcGuyLoJWL7VH2rfSg3RcN4QSH1ZQ4G2" },
+        { "number": 13, "title": "Capítulo 13", "fileId": "1v4mZYwys1VyN6vC5AtGbMFgfPnshVHkF" },
+        { "number": 14, "title": "Capítulo 14", "fileId": "16AbxY4fdne38dTyaaVPb_4Pc6whyK71M" },
+        { "number": 15, "title": "Capítulo 15", "fileId": "1lNF1J68TmmrMdXUA-acvq-e5N2aiaPKN" },
+        { "number": 16, "title": "Capítulo 16", "fileId": "1nTo-rx5bR2V5JwGyhvV9O7Zq8FXFUrsl" }
+      ]
     }
   ]
 }
