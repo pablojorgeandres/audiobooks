@@ -29,7 +29,7 @@ interface Progress {
   playbackRate: number
 }
 
-const SPEEDS = [0.5, 0.75, 1, 1.5, 2]
+const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2]
 
 type ViewMode = 'audio' | 'pdf'
 
@@ -65,11 +65,24 @@ export default function BookPage() {
   }, [book, chapterIndex, playbackRate])
 
   useEffect(() => {
-    fetch('/catalog.json')
-      .then(res => res.json())
-      .then((data: Catalog) => {
-        const foundBook = data.books.find(b => b.id === bookId)
+    async function loadBook() {
+      try {
+        const [catalogRes, chaptersRes] = await Promise.all([
+          fetch('/catalog.json'),
+          fetch(`/api/books/${bookId}/chapters`)
+        ])
+        
+        const catalogData: Catalog = await catalogRes.json()
+        const foundBook = catalogData.books.find(b => b.id === bookId)
+        
         if (foundBook) {
+          if (chaptersRes.ok) {
+            const chaptersData = await chaptersRes.json()
+            if (chaptersData.chapters && chaptersData.chapters.length > 0) {
+              foundBook.chapters = chaptersData.chapters
+            }
+          }
+          
           setBook(foundBook)
           
           const saved = localStorage.getItem('audiolibros-progress')
@@ -77,14 +90,28 @@ export default function BookPage() {
             const allProgress = JSON.parse(saved)
             const bookProgress = allProgress[foundBook.id] as Progress | undefined
             if (bookProgress) {
-              setChapterIndex(bookProgress.chapterIndex)
-              setCurrentTime(bookProgress.currentTime)
+              const validIndex = Math.min(bookProgress.chapterIndex, foundBook.chapters.length - 1)
+              setChapterIndex(validIndex)
+              if (validIndex === bookProgress.chapterIndex) {
+                setCurrentTime(bookProgress.currentTime)
+              }
               setPlaybackRate(bookProgress.playbackRate)
             }
           }
         }
-        setIsLoading(false)
-      })
+      } catch {
+        // Fallback to catalog only
+        const catalogRes = await fetch('/catalog.json')
+        const catalogData: Catalog = await catalogRes.json()
+        const foundBook = catalogData.books.find(b => b.id === bookId)
+        if (foundBook) {
+          setBook(foundBook)
+        }
+      }
+      setIsLoading(false)
+    }
+    
+    loadBook()
   }, [bookId])
 
   useEffect(() => {
@@ -426,7 +453,7 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '24px',
   },
   speedSelect: {
-    width: '64px',
+    width: '70px',
     height: '44px',
     backgroundColor: '#2a2a2a',
     border: 'none',

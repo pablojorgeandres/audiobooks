@@ -30,14 +30,47 @@ interface Progress {
 
 export default function Home() {
   const [catalog, setCatalog] = useState<Catalog | null>(null)
+  const [chapterCounts, setChapterCounts] = useState<Record<string, number>>({})
   const [progress, setProgress] = useState<Record<string, Progress>>({})
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
-    fetch('/catalog.json')
-      .then(res => res.json())
-      .then(data => setCatalog(data))
+    async function loadCatalog() {
+      const res = await fetch('/catalog.json')
+      const data: Catalog = await res.json()
+      setCatalog(data)
+
+      const counts: Record<string, number> = {}
+      for (const book of data.books) {
+        counts[book.id] = book.chapters.length
+      }
+      setChapterCounts(counts)
+
+      const chapterPromises = data.books.map(async (book) => {
+        try {
+          const chaptersRes = await fetch(`/api/books/${book.id}/chapters`)
+          if (chaptersRes.ok) {
+            const chaptersData = await chaptersRes.json()
+            if (chaptersData.chapters && chaptersData.chapters.length > 0) {
+              return { bookId: book.id, count: chaptersData.chapters.length }
+            }
+          }
+        } catch {
+          // Use fallback count
+        }
+        return { bookId: book.id, count: book.chapters.length }
+      })
+
+      const results = await Promise.all(chapterPromises)
+      const updatedCounts: Record<string, number> = {}
+      for (const { bookId, count } of results) {
+        updatedCounts[bookId] = count
+      }
+      setChapterCounts(updatedCounts)
+    }
+
+    loadCatalog()
 
     const saved = localStorage.getItem('audiolibros-progress')
     if (saved) {
@@ -99,10 +132,11 @@ export default function Home() {
       <div style={styles.bookList}>
         {filteredBooks.map(book => {
           const bookProgress = progress[book.id]
+          const count = chapterCounts[book.id] ?? book.chapters.length
           return (
             <Link key={book.id} href={`/book/${book.id}`} style={styles.bookCard}>
               <h2 style={styles.bookTitle}>{book.title}</h2>
-              <p style={styles.bookMeta}>{book.chapters.length} capítulos</p>
+              <p style={styles.bookMeta}>{count} capítulos</p>
               {bookProgress && (
                 <p style={styles.bookProgress}>
                   Capítulo {bookProgress.chapterIndex + 1}
